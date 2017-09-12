@@ -93,6 +93,7 @@
     <Compile Include="Assets\Scripts\Units\Effects\AuraEffect.cs" />
     <Compile Include="Assets\Scripts\Units\Effects\TimedEffect.cs" />
     <Compile Include="Assets\Scripts\Units\ItemBase.cs" />
+    <Compile Include="Assets\Scripts\Units\UnitStats.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Buildings\low poly medieval buildings\readme.txt" />

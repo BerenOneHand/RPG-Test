@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AuraEffect : MonoBehaviour {
+public class AuraEffect : EffectBase {
 
 	// Use this for initialization
 	void Start () {

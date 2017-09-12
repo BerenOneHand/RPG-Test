@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TimedEffect : MonoBehaviour {
+public class TimedEffect : EffectBase
+{
 
 	// Use this for initialization
 	void Start () {

@@ -1,54 +1,36 @@
 ﻿using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterBase : MonoBehaviour {
-    public enum ArmorTypes { Normal, Unarmored, Light, Heavy, Fortified, Heroic, Divine, Impregnable};
-    public enum AttackTypes { Normal, Unarmed, Piercing, Magic, Siege, Hero, Chaos, Pure};
+public class CharacterBase : MonoBehaviour
+{
+    public GameObject owner;
+    public GameObject target;
+    public enum ArmorTypes { Normal, Unarmored, Light, Heavy, Fortified, Heroic, Divine, Impregnable };
+    public enum DamageTypes { Normal, Unarmed, Piercing, Magic, Siege, Hero, Chaos, Pure };
 
-    public int BaseAttackSpeed;
-    public int BaseAttackDamage;
+    public UnitStats baseStats;
+    public ArmorTypes armorType;
+    public DamageTypes attackType;
 
-    public long BaseHitPoints;
-    public long BaseManaPoints;
-    public float BaseHitPointRegen;
-    public float BaseManaRegen;
-    public int BaseStrength;
-    public int BaseAgility;
-    public int BaseIntelligence;
+    public List<ItemBase> inventory;
+    //public bool inventoryMutated;
+    public List<AbilityBase> abilities;
+    //public bool abilitiesMutated;
+    public List<EffectBase> activeEffects;
+    public List<DamageInstance> queuedDamage;
 
-    public int BaseAttackRating;
-    public int BaseDefenseRating;
-    public int BaseArmorRating;
-    public int BaseDodge;
+    public ItemBase headItem;
+    public ItemBase chestItem;
+    public ItemBase weaponLeftItem;
+    public ItemBase weaponRightItem;
+    public ItemBase glovesItem;
+    public ItemBase waistItem;
+    public ItemBase legsItem;
+    public ItemBase feetItem;
 
-    public int BaseMagicDodge;
-    public int BaseMagicResistance;
-    public int BaseMagicAmplification;
-
-    public int BaseMovementSpeed;
-
-    public float BaseCritChance;
-    public float BaseCritDamage;
-
-    public ArmorTypes ArmorType;
-    public AttackTypes AttackType;
-
-    public List<ItemBase> Inventory;
-    public bool InventoryMutated;
-    public List<AbilityBase> Abilities;
-    public bool AbilitiesMutated;
-    public List<EffectBase> ActiveEffects;
-    public bool ActiveEffectsMutated;
-
-    public ItemBase HeadItem;
-    public ItemBase ChestItem;
-    public ItemBase WeaponLeftItem;
-    public ItemBase WeaponRightItem;
-    public ItemBase GlovesItem;
-    public ItemBase WaistItem;
-    public ItemBase LegsItem;
-    public ItemBase FeetItem;
+    public bool equipmentMutated;
 
     public bool isIdling;
     public bool isMoving;
@@ -57,47 +39,102 @@ public class CharacterBase : MonoBehaviour {
     public bool isStunned;
     public bool isEthereal;
     public bool isMagicImmune;
+    public bool isInvulnerable;
 
-    private int ComputedAttackSpeed;
-    private int ComputedAttackDamage;
+    public UnitStats computedStats;
 
-    private long ComputedHitPoints;
-    private long ComputedManaPoints;
-    private float ComputedHitPointRegen;
-    private float ComputedManaRegen;
-    private int ComputedStrength;
-    private int ComputedAgility;
-    private int ComputedIntelligence;
+    public double currentHitPoints;
+    public double currentManaPoints;
 
-    private int ComputedAttackRating;
-    private int ComputedDefenseRating;
-    private int ComputedArmorRating;
-    private int ComputedDodge;
+    void Start()
+    {
+        inventory = new List<ItemBase>();
+        abilities = new List<AbilityBase>();
+        activeEffects = new List<EffectBase>();
+        queuedDamage = new List<DamageInstance>();
 
-    private int ComputedMagicDodge;
-    private int ComputedMagicResistance;
-    private int ComputedMagicAmplification;
+        //inventoryMutated = true;
+        //abilitiesMutated = true;
+        equipmentMutated = true;
+    }
 
-    private int ComputedMovementSpeed;
 
-    private float ComputedCritChance;
-    private float ComputedCritDamage;
-	
-	public double CurrentHitPoints;
-	public double CurrentManaPoints;
-    // Use this for initialization
-    void Start () {
-        Inventory = new List<ItemBase>();
-        Abilities = new List<AbilityBase>();
-        ActiveEffects = new List<EffectBase>();
+    void Update()
+    {
+        //Do all effects which are due to run
+        foreach( var effect in activeEffects.Where(x => (x.lastInstance ?? 0) + (x.interval ?? 0) <= Time.time))
+        {
+            effect.DoEffect(this);
+        }
+        //Apply all queued damage instances
+        foreach(var damage in queuedDamage)
+        {
+            Damage(damage);
+        }
+        queuedDamage = new List<DamageInstance>();
 
-        InventoryMutated = false;
-        AbilitiesMutated = false;
-        ActiveEffectsMutated = false;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+        //Remove Expired effects
+        int effectsRemoved = activeEffects.RemoveAll(effect => effect.aura && Vector3.Distance(effect.owner.owner.transform.position, owner.transform.position) > (effect.radius?? 0));
+        effectsRemoved += activeEffects.RemoveAll(effect => !effect.passive && (effect.initialTime??0) + (effect.duration??0) < Time.time);
+
+        //Calculate new stats after removing effects
+        if (effectsRemoved > 0)
+        {
+
+        }
+    }
+    private void LateUpdate()
+    {
+
+    }
+
+    void Damage(DamageInstance di)
+    {
+        if (!isInvulnerable)
+        {
+            if(di.isAbility)
+            {
+
+            } else if (di.isAttack)
+            {
+
+            }
+        }
+    }
+    
+    void Target(GameObject gameObject)
+    {
+        var targetChar = gameObject.GetComponent<CharacterBase>();
+        if (targetChar != null)
+        {
+            target = gameObject;
+        }
+    }
+    
+    void LevelUp()
+    {
+
+    }
+
+    void LevelAbility()
+    {
+
+    }
+}
+
+public class DamageInstance
+{
+    public int hitPoints;
+    public int manaPoints;
+    public bool isAttack;
+    public bool isAbility;
+    public CharacterBase.DamageTypes damageType;
+    public bool trueStrike;
+
+    public DamageInstance(int hp, int mana)
+    {
+        hitPoints = hp;
+        manaPoints = mana;
+        
+    }
 }

@@ -1452,8 +1452,9 @@ Transform:
   - {fileID: 317099536}
   - {fileID: 327285950}
   - {fileID: 830599604}
+  - {fileID: 1183631918}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &405667258
 GameObject:
@@ -1927,7 +1928,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 50, y: -90, z: 0}
 --- !u!1 &625109006
 GameObject:
@@ -2078,7 +2079,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &696201362
 Prefab:
@@ -2195,7 +2196,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &723823391
 GameObject:
@@ -2975,23 +2976,23 @@ Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 391175516}
     m_Modifications:
     - target: {fileID: 400000, guid: 0c5fa332187126b49a1e9939b653c735, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 202.12
+      value: 89.7846
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 0c5fa332187126b49a1e9939b653c735, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 13.73
+      value: -16.617754
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 0c5fa332187126b49a1e9939b653c735, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 211.33
+      value: -27.233185
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 0c5fa332187126b49a1e9939b653c735, type: 2}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 0c5fa332187126b49a1e9939b653c735, type: 2}
       propertyPath: m_LocalRotation.y
@@ -2999,7 +3000,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 0c5fa332187126b49a1e9939b653c735, type: 2}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 0c5fa332187126b49a1e9939b653c735, type: 2}
       propertyPath: m_LocalRotation.w
@@ -3007,7 +3008,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 0c5fa332187126b49a1e9939b653c735, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 0c5fa332187126b49a1e9939b653c735, type: 2}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -3016,6 +3017,10 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0c5fa332187126b49a1e9939b653c735, type: 2}
   m_IsPrefabParent: 0
+--- !u!4 &1183631918 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 400000, guid: 0c5fa332187126b49a1e9939b653c735, type: 2}
+  m_PrefabInternal: {fileID: 1183631917}
 --- !u!1001 &1187179443
 Prefab:
   m_ObjectHideFlags: 0
@@ -4504,8 +4509,8 @@ GameObject:
   - component: {fileID: 1736095416}
   - component: {fileID: 1736095415}
   m_Layer: 0
-  m_Name: ThirdPersonController
-  m_TagString: Untagged
+  m_Name: Player
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4539,9 +4544,37 @@ MonoBehaviour:
   m_GameObject: {fileID: 1736095414}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 064ddfb5aeebf80458512050ee0ed8c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  owner: {fileID: 1736095414}
+  target: {fileID: 0}
+  baseStats: {fileID: 0}
+  armorType: 0
+  attackType: 0
+  inventory: []
+  abilities: []
+  activeEffects: []
+  headItem: {fileID: 0}
+  chestItem: {fileID: 0}
+  weaponLeftItem: {fileID: 0}
+  weaponRightItem: {fileID: 0}
+  glovesItem: {fileID: 0}
+  waistItem: {fileID: 0}
+  legsItem: {fileID: 0}
+  feetItem: {fileID: 0}
+  equipmentMutated: 0
+  isIdling: 0
+  isMoving: 0
+  isAttacking: 0
+  isCasting: 0
+  isStunned: 0
+  isEthereal: 0
+  isMagicImmune: 0
+  isInvulnerable: 0
+  computedStats: {fileID: 0}
+  currentHitPoints: 0
+  currentManaPoints: 0
 --- !u!136 &1736095417
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4604,7 +4637,7 @@ Transform:
   - {fileID: 1871446319}
   - {fileID: 334043135}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1750792184
 Prefab:
@@ -4980,7 +5013,7 @@ Transform:
   - {fileID: 2111208615}
   - {fileID: 739804646}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1964579092
 Prefab:
