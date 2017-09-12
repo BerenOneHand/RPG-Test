@@ -58,56 +58,33 @@ public class CharacterBase : MonoBehaviour {
     public bool isEthereal;
     public bool isMagicImmune;
 
-    private int _ComputedAttackSpeed;
-    private int _ComputedAttackDamage;
+    private int ComputedAttackSpeed;
+    private int ComputedAttackDamage;
 
-    private long _ComputedHitPoints;
-    private long _ComputedManaPoints;
-    private float _ComputedHitPointRegen;
-    private float _ComputedManaRegen;
-    private int _ComputedStrength;
-    private int _ComputedAgility;
-    private int _ComputedIntelligence;
+    private long ComputedHitPoints;
+    private long ComputedManaPoints;
+    private float ComputedHitPointRegen;
+    private float ComputedManaRegen;
+    private int ComputedStrength;
+    private int ComputedAgility;
+    private int ComputedIntelligence;
 
-    private int _ComputedAttackRating;
-    private int _ComputedDefenseRating;
-    private int _ComputedArmorRating;
-    private int _ComputedDodge;
+    private int ComputedAttackRating;
+    private int ComputedDefenseRating;
+    private int ComputedArmorRating;
+    private int ComputedDodge;
 
-    private int _ComputedMagicDodge;
-    private int _ComputedMagicResistance;
-    private int _ComputedMagicAmplification;
+    private int ComputedMagicDodge;
+    private int ComputedMagicResistance;
+    private int ComputedMagicAmplification;
 
-    private int _ComputedMovementSpeed;
+    private int ComputedMovementSpeed;
 
-    private float _ComputedCritChance;
-    private float _ComputedCritDamage;
-
-    public int ComputedAttackSpeed{ get;  }
-    public int ComputedAttackDamage{ get;  }
-
-    public long ComputedHitPoints{ get;  }
-    public long ComputedManaPoints{ get;  }
-    public float ComputedHitPointRegen{ get;  }
-    public float ComputedManaRegen{ get;  }
-    public int ComputedStrength{ get;  }
-    public int ComputedAgility{ get;  }
-    public int ComputedIntelligence{ get;  }
-
-    public int ComputedAttackRating{ get;  }
-    public int ComputedDefenseRating{ get;  }
-    public int ComputedArmorRating{ get;  }
-    public int ComputedDodge{ get;  }
-
-    public int ComputedMagicDodge{ get;  }
-    public int ComputedMagicResistance{ get;  }
-    public int ComputedMagicAmplification{ get;  }
-
-    public int ComputedMovementSpeed{ get;  }
-
-    public float ComputedCritChance{ get;  }
-    public float ComputedCritDamage{ get;  }
-
+    private float ComputedCritChance;
+    private float ComputedCritDamage;
+	
+	public double CurrentHitPoints;
+	public double CurrentManaPoints;
     // Use this for initialization
     void Start () {
         Inventory = new List<ItemBase>();
