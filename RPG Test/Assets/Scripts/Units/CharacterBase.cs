@@ -7,8 +7,6 @@ public class CharacterBase : MonoBehaviour
 {
     public GameObject owner;
     public GameObject target;
-    public enum ArmorTypes { Normal, Unarmored, Light, Heavy, Fortified, Heroic, Divine, Impregnable };
-    public enum DamageTypes { Normal, Unarmed, Piercing, Magic, Siege, Hero, Chaos, Pure };
 
     public UnitStats baseStats;
     public ArmorTypes armorType;
@@ -128,7 +126,7 @@ public class DamageInstance
     public int manaPoints;
     public bool isAttack;
     public bool isAbility;
-    public CharacterBase.DamageTypes damageType;
+    public DamageTypes damageType;
     public bool trueStrike;
 
     public DamageInstance(int hp, int mana)

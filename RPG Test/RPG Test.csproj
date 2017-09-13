@@ -85,7 +85,11 @@
     <Compile Include="Assets\Characters\Goblin_rouge\Script\Goblin_ro_ctrl.cs" />
     <Compile Include="Assets\Characters\Golem\Scripts\buttons.cs" />
     <Compile Include="Assets\Rocks and Boulders 2\Shaders\RotateGameObject.cs" />
+    <Compile Include="Assets\Scripts\UI\CameraRaycaster.cs" />
     <Compile Include="Assets\Scripts\UI\MouseEvents.cs" />
+    <Compile Include="Assets\Scripts\UI\PlayerMovement.cs" />
+    <Compile Include="Assets\Scripts\UI\StrateCamC.cs" />
+    <Compile Include="Assets\Scripts\UI\TransformExtensions.cs" />
     <Compile Include="Assets\Scripts\Units\AbilityBase.cs" />
     <Compile Include="Assets\Scripts\Units\CharacterBase.cs" />
     <Compile Include="Assets\Scripts\Units\EffectBase.cs" />
@@ -94,6 +98,7 @@
     <Compile Include="Assets\Scripts\Units\Effects\TimedEffect.cs" />
     <Compile Include="Assets\Scripts\Units\ItemBase.cs" />
     <Compile Include="Assets\Scripts\Units\UnitStats.cs" />
+    <Compile Include="Assets\Scripts\Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Buildings\low poly medieval buildings\readme.txt" />
