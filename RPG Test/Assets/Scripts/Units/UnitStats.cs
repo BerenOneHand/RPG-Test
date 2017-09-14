@@ -6,6 +6,7 @@ public class UnitStats : MonoBehaviour {
 
 	public int AttackSpeed;
 	public int AttackDamage;
+    public int MissChance;
 
 	public long HitPoints;
 	public long ManaPoints;

@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     ThirdPersonCharacter m_Character;   // A reference to the ThirdPersonCharacter on the object
     CameraRaycaster cameraRaycaster;
     Vector3 currentClickTarget;
+    public float closeDistance = 0.15f;
         
     private void Start()
     {
@@ -19,12 +20,27 @@ public class PlayerMovement : MonoBehaviour
     // Fixed update is called in sync with physics
     private void FixedUpdate()
     {
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(1))
         {
-            print("Cursor raycast hit" + cameraRaycaster.hit.collider.gameObject.name.ToString());
-            currentClickTarget = cameraRaycaster.hit.point;  // So not set in default case
+            switch (cameraRaycaster.currentLayerHit)
+            {
+                case Layers.Pathable:
+                    currentClickTarget = cameraRaycaster.hit.point;
+                    break;
+                case Layers.Unit:
+                    print("Not moving to enemy");
+                    break;
+                case Layers.OutOfBounds:
+                    print("Not moving to out of bounds area");
+                    break;
+                default:
+                    print("Unexpected layer found");
+                    return;
+            }
         }
-        m_Character.Move(currentClickTarget - transform.position, false, false);
+        var movingVector = currentClickTarget - transform.position;
+        if (movingVector.magnitude > closeDistance) m_Character.Move(movingVector, false, false);
+        else m_Character.Move(new Vector3(0,0,0), false, false);
     }
 }
 

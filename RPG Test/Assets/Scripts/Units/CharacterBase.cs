@@ -92,10 +92,17 @@ public class CharacterBase : MonoBehaviour
         {
             if(di.isAbility)
             {
-
+                if (!di.trueStrike) {
+                    var randomValue = Random.value;
+                    if (randomValue * 100 < computedStats.MagicDodge) return;
+                }
             } else if (di.isAttack)
             {
-
+                if (!di.trueStrike)
+                {
+                    var randomValue = Random.value;
+                    if (randomValue * 100 < computedStats.Dodge) return;
+                }
             }
         }
     }
