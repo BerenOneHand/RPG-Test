@@ -20,16 +20,18 @@ public class UnitStats {
 	public int ArmorRating = 0;
 	//public int Dodge = 0;
 
-	public int MagicDodge = 0;
+	//public int MagicDodge = 0;
 	public int MagicResistance = 0;
 	public int MagicAmplification = 0;
 
 	public int MovementSpeed = 0;
 
     public List<int> DodgeInstances;
+    public List<int> MagicDodgeInstances;
     public List<CritInstance> CritInstances;
-	//public float CritChance = 0;
-	//public float CritDamage = 0;
+    public List<CritInstance> MagicCritInstances;
+    //public float CritChance = 0;
+    //public float CritDamage = 0;
 
     public bool isPercentage = false;// Only to be used by stats mutation
 
@@ -49,14 +51,16 @@ public class UnitStats {
             Intelligence = u1.Intelligence + u2.Intelligence,
             ArmorRating = u1.ArmorRating + u2.ArmorRating,
             //Dodge = u1.Dodge + u2.Dodge,
-            MagicDodge = u1.MagicDodge + u2.MagicDodge,
+            //MagicDodge = u1.MagicDodge + u2.MagicDodge,
             MagicResistance = u1.MagicResistance + u2.MagicResistance,
             MagicAmplification = u1.MagicAmplification + u2.MagicAmplification,
             MovementSpeed = u1.MovementSpeed + u2.MovementSpeed,
             //CritChance = u1.CritChance + u2.CritChance,
             //CritDamage = u1.CritDamage + u2.CritDamage
             DodgeInstances = new List<int>(u1.DodgeInstances.Union(u2.DodgeInstances)),
-            CritInstances = new List<CritInstance>(u1.CritInstances.Union(u2.CritInstances))
+            MagicDodgeInstances = new List<int>(u1.MagicDodgeInstances.Union(u2.MagicDodgeInstances)),
+            CritInstances = new List<CritInstance>(u1.CritInstances.Union(u2.CritInstances)),
+            MagicCritInstances = new List<CritInstance>(u1.MagicCritInstances.Union(u2.MagicCritInstances))
         };
     }
 
@@ -76,7 +80,7 @@ public class UnitStats {
             Intelligence = u1.Intelligence + u2,
             ArmorRating = u1.ArmorRating + u2,
             //Dodge = u1.Dodge + u2,
-            MagicDodge = u1.MagicDodge + u2,
+            //MagicDodge = u1.MagicDodge + u2,
             MagicResistance = u1.MagicResistance + u2,
             MagicAmplification = u1.MagicAmplification + u2,
             MovementSpeed = u1.MovementSpeed + u2,
@@ -102,7 +106,7 @@ public class UnitStats {
             Intelligence = u1.Intelligence * u2.Intelligence,
             ArmorRating = u1.ArmorRating * u2.ArmorRating,
             //Dodge = u1.Dodge * u2.Dodge,
-            MagicDodge = u1.MagicDodge * u2.MagicDodge,
+            //MagicDodge = u1.MagicDodge * u2.MagicDodge,
             MagicResistance = u1.MagicResistance * u2.MagicResistance,
             MagicAmplification = u1.MagicAmplification * u2.MagicAmplification,
             MovementSpeed = u1.MovementSpeed * u2.MovementSpeed,
@@ -128,7 +132,7 @@ public class UnitStats {
             Intelligence = u1.Intelligence / u2,
             ArmorRating = u1.ArmorRating / u2,
             //Dodge = u1.Dodge / u2,
-            MagicDodge = u1.MagicDodge / u2,
+            //MagicDodge = u1.MagicDodge / u2,
             MagicResistance = u1.MagicResistance / u2,
             MagicAmplification = u1.MagicAmplification / u2,
             MovementSpeed = u1.MovementSpeed / u2,

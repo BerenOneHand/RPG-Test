@@ -12,4 +12,6 @@ public static class GlobalVariables {
     static public float manaRegenPerIntelligence;
     static public float magicAmplificationPerIntelligence;
 
+    static public int armorEffectiveness;
+    static public int magicResistenceEffectiveness;
 }

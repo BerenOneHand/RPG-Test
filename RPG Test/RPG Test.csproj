@@ -91,12 +91,10 @@
     <Compile Include="Assets\Scripts\UI\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\UI\StrateCamC.cs" />
     <Compile Include="Assets\Scripts\UI\TransformExtensions.cs" />
+    <Compile Include="Assets\Scripts\Units\Abilities\IAbility.cs" />
+    <Compile Include="Assets\Scripts\Units\BattleClasses.cs" />
     <Compile Include="Assets\Scripts\Units\CharacterBase.cs" />
-    <Compile Include="Assets\Scripts\Units\Effects\AttackEffect.cs" />
-    <Compile Include="Assets\Scripts\Units\Effects\AuraEffect.cs" />
-    <Compile Include="Assets\Scripts\Units\Effects\TimedEffect.cs" />
-    <Compile Include="Assets\Scripts\Units\IAbility.cs" />
-    <Compile Include="Assets\Scripts\Units\IEffect.cs" />
+    <Compile Include="Assets\Scripts\Units\Effects\IEffect.cs" />
     <Compile Include="Assets\Scripts\Units\ItemBase.cs" />
     <Compile Include="Assets\Scripts\Units\Target.cs" />
     <Compile Include="Assets\Scripts\Units\UnitStats.cs" />

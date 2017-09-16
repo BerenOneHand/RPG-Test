@@ -66,12 +66,12 @@ public class CharacterBase : MonoBehaviour
         int effectsRemoved = activeEffects.RemoveAll(x => x.GetTimeLeft() <= 0);
 
         //Do all effects which are due to run
-        foreach( var effect in activeEffects)
+        foreach (var effect in activeEffects)
         {
             effect.DoEffect(this);
         }
         //Apply all queued damage instances
-        foreach(var damage in queuedDamage)
+        foreach (var damage in queuedDamage)
         {
             DealDamage(damage);
         }
@@ -82,36 +82,134 @@ public class CharacterBase : MonoBehaviour
         {
             _statsMutation = new UnitStats();
             _computedStats = new UnitStats();
+            foreach (var effect in activeEffects)
+            {
+                effect.DoEffect(this);
+            }
         }
     }
     private void LateUpdate()
     {
-
+        if (currentHitPoints <= 0)
+        {
+            Die();
+        }
     }
 
     public float DealDamage(DamageInstance di)
     {
         float actualDamageDealt = 0;
-        //if (!isInvulnerable)
-        //{
-        //    if(di.isAbility)
-        //    {
-        //        if (!di.trueStrike) {
-        //            var randomValue = Random.value;
-        //            if (randomValue * 100 < computedStats.MagicDodge) return actualDamageDealt;
-        //        }
-        //    } else if (di.isAttack)
-        //    {
-        //        if (!di.trueStrike)
-        //        {
-        //            var randomValue = Random.value;
-        //            if (randomValue * 100 < computedStats.Dodge) return actualDamageDealt;
-        //        }
-        //    }
-        //}
+        if (!isInvulnerable)
+        {
+            if (di.isAbility)
+            {
+                if (!di.trueStrike)
+                {
+                    foreach (int dodge in _computedStats.MagicDodgeInstances)
+                    {
+                        var randomValue = Random.value;
+                        if (randomValue * 100 < dodge) return actualDamageDealt;
+                    }
+                }
+                foreach (var crit in _computedStats.MagicCritInstances)
+                {
+                    var randomValue = Random.value;
+                    if (randomValue * 100 < crit.CritChance) di *= (crit.CritDamage / 100);
+                }
+            }
+            else if (di.isAttack)
+            {
+                if (!di.trueStrike)
+                {
+                    foreach (var dodge in _computedStats.DodgeInstances)
+                    {
+                        var randomValue = Random.value;
+                        if (randomValue * 100 < dodge) return actualDamageDealt;
+                    }
+                }
+                foreach (var crit in _computedStats.CritInstances)
+                {
+                    var randomValue = Random.value;
+                    if (randomValue * 100 < crit.CritChance) di *= (crit.CritDamage / 100);
+                }
+            }
+        }
+        float damageMultiplier = GetDamageMultiplier(di);
+        float defenseMultiplier = GetDefenseMultiplier();
+        actualDamageDealt = (di.hitPoints) * damageMultiplier * defenseMultiplier;
+        currentHitPoints -= actualDamageDealt;
+        currentManaPoints -= (di.manaPoints) * damageMultiplier * defenseMultiplier;
         return actualDamageDealt;
     }
-    
+
+    private float GetDamageMultiplier(DamageInstance di)
+    {
+        if (di.isAbility)
+        {
+            switch (di.damageType)
+            {
+                case (DamageTypes.Magic):
+                case (DamageTypes.Normal):
+                case (DamageTypes.Siege):
+                case (DamageTypes.Piercing):
+                case (DamageTypes.Unarmed):
+                    return (_computedStats.MagicResistance) / GlobalVariables.magicResistenceEffectiveness;
+                case (DamageTypes.Hero):
+                    return ((float)0.8 * _computedStats.MagicResistance) / GlobalVariables.magicResistenceEffectiveness;
+                case (DamageTypes.Chaos):
+                    return ((float)0.6 * _computedStats.MagicResistance) / GlobalVariables.magicResistenceEffectiveness;
+                case (DamageTypes.Pure):
+                    return 1;
+                default:
+                    return (_computedStats.MagicResistance) / GlobalVariables.magicResistenceEffectiveness;
+            }
+        }
+        if (di.isAttack)
+        {
+            switch (di.damageType)
+            {
+                case (DamageTypes.Magic):
+                case (DamageTypes.Normal):
+                case (DamageTypes.Siege):
+                case (DamageTypes.Piercing):
+                case (DamageTypes.Unarmed):
+                    return (_computedStats.ArmorRating) / GlobalVariables.armorEffectiveness;
+                case (DamageTypes.Hero):
+                    return ((float)0.8 * _computedStats.ArmorRating) / GlobalVariables.armorEffectiveness;
+                case (DamageTypes.Chaos):
+                    return ((float)0.6 * _computedStats.ArmorRating) / GlobalVariables.armorEffectiveness;
+                case (DamageTypes.Pure):
+                    return 1;
+                default:
+                    return (_computedStats.ArmorRating) / GlobalVariables.armorEffectiveness;
+            }
+        }
+        return 0;
+    }
+
+    private float GetDefenseMultiplier()
+    {
+        switch (armorType)
+        {
+            case (ArmorTypes.Light):
+                return (float)1;
+            case (ArmorTypes.Normal):
+                return (float)1;
+            case (ArmorTypes.Unarmored):
+                return (float)1;
+            case (ArmorTypes.Heavy):
+                return (float)0.95;
+            case (ArmorTypes.Fortified):
+                return (float)0.80;
+            case (ArmorTypes.Divine):
+                return (float)0.65;
+            case (ArmorTypes.Impregnable):
+                return (float)0.5;
+            default:
+                return 1;
+        }
+    }
+
     void Target(GameObject gameObject)
     {
         var targetChar = gameObject.GetComponent<CharacterBase>();
@@ -126,7 +224,8 @@ public class CharacterBase : MonoBehaviour
         if (unitStats.isPercentage)
         {
             _statsPercentageMutation += unitStats;
-        } else
+        }
+        else
         {
             _statsMutation += unitStats;
         }
@@ -139,10 +238,10 @@ public class CharacterBase : MonoBehaviour
         // Compute strength additions
         switch (primaryAttribute)
         {
-            case (Attribute.Strength): _computedStats.AttackDamage += _computedStats.Strength;break;
-            case (Attribute.Agility): _computedStats.AttackDamage += _computedStats.Agility;break;
-            case (Attribute.Intelligence):_computedStats.AttackDamage += _computedStats.Intelligence;break;
-            default: print("Unexpected attribute you noob.");break;
+            case (Attribute.Strength): _computedStats.AttackDamage += _computedStats.Strength; break;
+            case (Attribute.Agility): _computedStats.AttackDamage += _computedStats.Agility; break;
+            case (Attribute.Intelligence): _computedStats.AttackDamage += _computedStats.Intelligence; break;
+            default: print("Unexpected attribute you noob."); break;
         }
 
         _computedStats.HitPoints += (int)(_computedStats.Strength * GlobalVariables.hpPerStrength);
@@ -154,5 +253,12 @@ public class CharacterBase : MonoBehaviour
         _computedStats.MagicAmplification += (int)(_computedStats.Intelligence * GlobalVariables.magicAmplificationPerIntelligence);
 
         return _computedStats;
+    }
+
+    public void Die()
+    {
+        //Perform die animation
+
+        //Kill object
     }
 }
