@@ -5,26 +5,27 @@ using System.Linq;
 using UnityEngine;
 
 public class UnitStats {
+    public float AttackTime = 0;
+	public float AttackSpeed = 0;
+	public float AttackDamage = 0;
+    public float AttackRange = 0;
+    public float MissChance = 0;
 
-	public int AttackSpeed = 0;
-	public int AttackDamage = 0;
-    public int MissChance = 0;
-
-	public int HitPoints = 0;
-	public int ManaPoints = 0;
+	public float HitPoints = 0;
+	public float ManaPoints = 0;
 	public float HitPointRegen = 0;
 	public float ManaRegen = 0;
-	public int Strength = 0;
-	public int Agility = 0;
-	public int Intelligence = 0;
-	public int ArmorRating = 0;
+	public float Strength = 0;
+	public float Agility = 0;
+	public float Intelligence = 0;
+	public float ArmorRating = 0;
 	//public int Dodge = 0;
 
 	//public int MagicDodge = 0;
-	public int MagicResistance = 0;
-	public int MagicAmplification = 0;
-
-	public int MovementSpeed = 0;
+	public float MagicResistance = 0;
+	public float MagicAmplification = 0;
+           
+	public float MovementSpeed = 0;
 
     public List<int> DodgeInstances;
     public List<int> MagicDodgeInstances;

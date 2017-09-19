@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class CharacterBase : MonoBehaviour
 {
@@ -43,6 +44,12 @@ public class CharacterBase : MonoBehaviour
     private UnitStats _statsMutation;
     private UnitStats _statsPercentageMutation;
 
+    public UnitStats statsGrowth;
+    public int abilityPoints;
+    public Int64 currentExperience;
+    public Int64 neededExperience;
+    public Int16 level;
+
     public UnitStats ComputedStats { get { return _computedStats; } }
 
     [SerializeField] double currentHitPoints;
@@ -73,12 +80,14 @@ public class CharacterBase : MonoBehaviour
         //Apply all queued damage instances
         foreach (var damage in queuedDamage)
         {
-            DealDamage(damage);
+            TakeDamage(damage);
         }
         queuedDamage = new List<DamageInstance>();
 
         //Calculate new stats after removing effects
-        if (effectsRemoved > 0)
+        if (currentHitPoints <= 0) Die();
+        else if (currentExperience > neededExperience) LevelUp();
+        else if (effectsRemoved > 0)
         {
             _statsMutation = new UnitStats();
             _computedStats = new UnitStats();
@@ -88,6 +97,7 @@ public class CharacterBase : MonoBehaviour
             }
         }
     }
+
     private void LateUpdate()
     {
         if (currentHitPoints <= 0)
@@ -96,7 +106,12 @@ public class CharacterBase : MonoBehaviour
         }
     }
 
-    public float DealDamage(DamageInstance di)
+    public void AttackTarget()
+    {
+
+    }
+
+    public float TakeDamage(DamageInstance di)
     {
         float actualDamageDealt = 0;
         if (!isInvulnerable)
@@ -107,13 +122,13 @@ public class CharacterBase : MonoBehaviour
                 {
                     foreach (int dodge in _computedStats.MagicDodgeInstances)
                     {
-                        var randomValue = Random.value;
+                        var randomValue = UnityEngine.Random.value;
                         if (randomValue * 100 < dodge) return actualDamageDealt;
                     }
                 }
                 foreach (var crit in _computedStats.MagicCritInstances)
                 {
-                    var randomValue = Random.value;
+                    var randomValue = UnityEngine.Random.value;
                     if (randomValue * 100 < crit.CritChance) di *= (crit.CritDamage / 100);
                 }
             }
@@ -123,13 +138,13 @@ public class CharacterBase : MonoBehaviour
                 {
                     foreach (var dodge in _computedStats.DodgeInstances)
                     {
-                        var randomValue = Random.value;
+                        var randomValue = UnityEngine.Random.value;
                         if (randomValue * 100 < dodge) return actualDamageDealt;
                     }
                 }
                 foreach (var crit in _computedStats.CritInstances)
                 {
-                    var randomValue = Random.value;
+                    var randomValue = UnityEngine.Random.value;
                     if (randomValue * 100 < crit.CritChance) di *= (crit.CritDamage / 100);
                 }
             }
@@ -153,15 +168,15 @@ public class CharacterBase : MonoBehaviour
                 case (DamageTypes.Siege):
                 case (DamageTypes.Piercing):
                 case (DamageTypes.Unarmed):
-                    return (_computedStats.MagicResistance) / GlobalVariables.magicResistenceEffectiveness;
+                    return (_computedStats.MagicResistance) / (GlobalVariables.magicResistenceEffectiveness + _computedStats.MagicResistance);
                 case (DamageTypes.Hero):
-                    return ((float)0.8 * _computedStats.MagicResistance) / GlobalVariables.magicResistenceEffectiveness;
+                    return ( _computedStats.MagicResistance) / (GlobalVariables.magicResistenceEffectiveness + (float)0.8 *_computedStats.MagicResistance);
                 case (DamageTypes.Chaos):
-                    return ((float)0.6 * _computedStats.MagicResistance) / GlobalVariables.magicResistenceEffectiveness;
+                    return ( _computedStats.MagicResistance) / (GlobalVariables.magicResistenceEffectiveness + (float)0.6 * _computedStats.MagicResistance);
                 case (DamageTypes.Pure):
                     return 1;
                 default:
-                    return (_computedStats.MagicResistance) / GlobalVariables.magicResistenceEffectiveness;
+                    return (_computedStats.MagicResistance) / (GlobalVariables.magicResistenceEffectiveness + _computedStats.MagicResistance);
             }
         }
         if (di.isAttack)
@@ -173,15 +188,15 @@ public class CharacterBase : MonoBehaviour
                 case (DamageTypes.Siege):
                 case (DamageTypes.Piercing):
                 case (DamageTypes.Unarmed):
-                    return (_computedStats.ArmorRating) / GlobalVariables.armorEffectiveness;
+                    return (_computedStats.ArmorRating) / (GlobalVariables.armorEffectiveness + _computedStats.ArmorRating);
                 case (DamageTypes.Hero):
-                    return ((float)0.8 * _computedStats.ArmorRating) / GlobalVariables.armorEffectiveness;
+                    return (_computedStats.ArmorRating) / (GlobalVariables.armorEffectiveness + (float)0.8 * _computedStats.ArmorRating);
                 case (DamageTypes.Chaos):
-                    return ((float)0.6 * _computedStats.ArmorRating) / GlobalVariables.armorEffectiveness;
+                    return (_computedStats.ArmorRating) / (GlobalVariables.armorEffectiveness + (float)0.6 * _computedStats.ArmorRating);
                 case (DamageTypes.Pure):
                     return 1;
                 default:
-                    return (_computedStats.ArmorRating) / GlobalVariables.armorEffectiveness;
+                    return (_computedStats.ArmorRating) / (GlobalVariables.armorEffectiveness + _computedStats.ArmorRating);
             }
         }
         return 0;
@@ -253,6 +268,35 @@ public class CharacterBase : MonoBehaviour
         _computedStats.MagicAmplification += (int)(_computedStats.Intelligence * GlobalVariables.magicAmplificationPerIntelligence);
 
         return _computedStats;
+    }
+
+    public void ActivateAbility(int index)
+    {
+        if (abilities.Count > index)
+            abilities[index].OnActivate();
+        else print("Ability index out of bounds");
+    }
+
+    public void LevelUp()
+    {
+        baseStats += statsGrowth;
+        currentExperience = 0;
+        neededExperience = (long)(neededExperience * GlobalVariables.experienceGrowthFactor);
+        _statsMutation = new UnitStats();
+        _computedStats = new UnitStats();
+        foreach (var effect in activeEffects)
+        {
+            effect.DoEffect(this);
+        }
+        abilityPoints += 1;
+        level += 1;
+    }
+
+    public void LevelAbility(int index)
+    {
+        if (abilities.Count > index)
+            abilities[index].OnLevelUp();
+        else print("Ability index out of bounds");
     }
 
     public void Die()

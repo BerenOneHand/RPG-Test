@@ -14,4 +14,5 @@ public static class GlobalVariables {
 
     static public int armorEffectiveness;
     static public int magicResistenceEffectiveness;
+    static public float experienceGrowthFactor;
 }
